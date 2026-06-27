@@ -1,0 +1,17 @@
+.env
+backend/.env
+keys/
+*.log
+__pycache__/
+*.pyc
+frontend/node_modules/
+frontend/dist/
+.agents/
+.codex/
+.codex-downloads/
+.uploads/
+books/*.pdf
+backend/renders/
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3

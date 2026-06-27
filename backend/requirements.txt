@@ -1,0 +1,6 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pypdf>=5.0
+joblib>=1.4
+numpy>=2.0
+xgboost>=3.2,<3.3
