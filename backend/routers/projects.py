@@ -26,6 +26,26 @@ DEMO_PROJECT_NAME = "广州办公楼西向立面优化"
 EXAMPLE_PROJECT_NAME = STARTER_PROJECT_NAME
 LEGACY_EMPTY_PROJECT_NAME = "FacadeGPT 示例项目"
 
+DEMO_RENDER_URLS = {
+    "outdoor": "/demo-renders/west-office-outdoor.png",
+    "elevation_detail": "/demo-renders/west-office-elevation-detail.png",
+    "axonometric_corner": "/demo-renders/west-office-axonometric-corner.png",
+    "outdoor_wide": "/demo-renders/west-office-outdoor-wide.png",
+    "facade_grid": "/demo-renders/west-office-facade-grid.png",
+    "horizontal_louver": "/demo-renders/west-office-horizontal-louver.png",
+    "closeup_shadow": "/demo-renders/west-office-closeup-shadow.png",
+}
+
+LEGACY_DEMO_RENDER_URLS = {
+    "/renders/f7850b1d-8604-4267-bdd4-c912f6fdc4d9.png": DEMO_RENDER_URLS["outdoor"],
+    "/renders/095c94a4-b0ba-4a65-ad26-f5b283561f9a.png": DEMO_RENDER_URLS["elevation_detail"],
+    "/renders/964baba0-c200-4489-a50d-adbf0848e1bd.png": DEMO_RENDER_URLS["axonometric_corner"],
+    "/renders/5fa35a00-2d99-4950-ac36-9c7709c2a130.png": DEMO_RENDER_URLS["outdoor_wide"],
+    "/renders/32c1d222-16ac-4d42-bd3a-b3773efe2b76.png": DEMO_RENDER_URLS["facade_grid"],
+    "/renders/df80e630-a9b4-4588-bb0c-c5af05f2d6a5.png": DEMO_RENDER_URLS["horizontal_louver"],
+    "/renders/efa71ea4-dda5-4a04-8cbc-15fa450f32e6.png": DEMO_RENDER_URLS["closeup_shadow"],
+}
+
 DEMO_DEMAND_TEXT = (
     "广州天河区办公楼，西向立面下午西晒明显，希望降低冷负荷和眩光，"
     "预算中等偏紧，倾向轻质铝合金构件，同时保留较好的办公采光。"
@@ -101,9 +121,9 @@ DEMO_SCHEMES = [
             "discussion": "该方案适合作为低碳控制基准方案，后续可围绕材料截面、构件颜色和局部开启方式深化。",
         },
         "renders": [
-            {"view_type": "outdoor", "image_url": "/renders/f7850b1d-8604-4267-bdd4-c912f6fdc4d9.png"},
-            {"view_type": "elevation", "image_url": "/renders/095c94a4-b0ba-4a65-ad26-f5b283561f9a.png"},
-            {"view_type": "axonometric", "image_url": "/renders/964baba0-c200-4489-a50d-adbf0848e1bd.png"},
+            {"view_type": "outdoor", "image_url": DEMO_RENDER_URLS["outdoor"]},
+            {"view_type": "elevation", "image_url": DEMO_RENDER_URLS["elevation_detail"]},
+            {"view_type": "axonometric", "image_url": DEMO_RENDER_URLS["axonometric_corner"]},
         ],
     },
     {
@@ -141,10 +161,10 @@ DEMO_SCHEMES = [
             "discussion": "该方案更像竞赛展示中的经济型对照组，便于说明 FacadeGPT 如何帮助学生比较设计取舍。",
         },
         "renders": [
-            {"view_type": "outdoor", "image_url": "/renders/5fa35a00-2d99-4950-ac36-9c7709c2a130.png"},
-            {"view_type": "elevation", "image_url": "/renders/32c1d222-16ac-4d42-bd3a-b3773efe2b76.png"},
-            {"view_type": "axonometric", "image_url": "/renders/df80e630-a9b4-4588-bb0c-c5af05f2d6a5.png"},
-            {"view_type": "indoor", "image_url": "/renders/efa71ea4-dda5-4a04-8cbc-15fa450f32e6.png"},
+            {"view_type": "outdoor", "image_url": DEMO_RENDER_URLS["outdoor_wide"]},
+            {"view_type": "elevation", "image_url": DEMO_RENDER_URLS["facade_grid"]},
+            {"view_type": "axonometric", "image_url": DEMO_RENDER_URLS["horizontal_louver"]},
+            {"view_type": "indoor", "image_url": DEMO_RENDER_URLS["closeup_shadow"]},
         ],
     },
 ]
@@ -391,9 +411,29 @@ def _migrate_legacy_empty_seed_projects(conn, user_id: str) -> None:
             )
 
 
+def _migrate_demo_render_urls(conn, user_id: str) -> None:
+    for old_url, new_url in LEGACY_DEMO_RENDER_URLS.items():
+        conn.execute(
+            """
+            UPDATE render_images
+            SET image_url = ?
+            WHERE image_url = ?
+              AND COALESCE(provider, '') = 'demo-seed'
+              AND scheme_id IN (
+                  SELECT s.id
+                  FROM schemes s
+                  JOIN projects p ON p.id = s.project_id
+                  WHERE p.user_id = ?
+              )
+            """,
+            (new_url, old_url, user_id),
+        )
+
+
 def _ensure_user_workspace(conn, user_id: str) -> None:
     ensure_user(conn, user_id)
     _migrate_legacy_empty_seed_projects(conn, user_id)
+    _migrate_demo_render_urls(conn, user_id)
 
     legacy_count = conn.execute("SELECT COUNT(*) AS count FROM projects WHERE user_id IS NULL").fetchone()["count"]
     if legacy_count:

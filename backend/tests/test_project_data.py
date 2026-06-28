@@ -123,7 +123,7 @@ class ProjectDataTests(unittest.TestCase):
         for scheme in scheme_data["schemes"]:
             renders = schemes.get_scheme_renders(scheme["scheme_id"], user_id="demo-user")["renders"]
             self.assertGreaterEqual(len(renders), 3)
-            self.assertTrue(all(item["image_url"].startswith("/renders/") for item in renders))
+            self.assertTrue(all(item["image_url"].startswith("/demo-renders/") for item in renders))
 
 
 if __name__ == "__main__":
