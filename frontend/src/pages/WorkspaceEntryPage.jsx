@@ -13,7 +13,8 @@ export default function WorkspaceEntryPage() {
     async function enterWorkspace() {
       try {
         const data = await api.listProjects();
-        let project = data.projects?.[0];
+        const projects = data.projects || [];
+        let project = projects.find((item) => !String(item.seed_kind || "").startsWith("demo_"));
         if (!project) project = await api.createProject("我的第一个外遮阳项目");
         if (!cancelled) navigate(`/project/${project.project_id}/chat`, { replace: true });
       } catch (err) {

@@ -40,6 +40,7 @@ def init_db() -> None:
                 id TEXT PRIMARY KEY,
                 display_name TEXT,
                 seed_project_created INTEGER DEFAULT 0,
+                demo_seed_version INTEGER DEFAULT 0,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 last_seen_at TEXT DEFAULT CURRENT_TIMESTAMP
             );
@@ -48,6 +49,7 @@ def init_db() -> None:
                 id TEXT PRIMARY KEY,
                 user_id TEXT REFERENCES users(id),
                 name TEXT NOT NULL,
+                seed_kind TEXT DEFAULT 'user',
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 updated_at TEXT DEFAULT CURRENT_TIMESTAMP
             );
@@ -185,6 +187,7 @@ def init_db() -> None:
             {
                 "display_name": "TEXT",
                 "seed_project_created": "INTEGER DEFAULT 0",
+                "demo_seed_version": "INTEGER DEFAULT 0",
                 "created_at": "TEXT DEFAULT CURRENT_TIMESTAMP",
                 "last_seen_at": "TEXT DEFAULT CURRENT_TIMESTAMP",
             },
@@ -194,6 +197,7 @@ def init_db() -> None:
             "projects",
             {
                 "user_id": "TEXT",
+                "seed_kind": "TEXT DEFAULT 'user'",
             },
         )
         conn.execute(

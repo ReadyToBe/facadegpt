@@ -22,8 +22,8 @@ class ProjectDataTests(unittest.TestCase):
         database.init_db()
         with database.get_connection() as conn:
             conn.execute(
-                "INSERT INTO users (id, seed_project_created) VALUES (?, 1)",
-                (self.user_id,),
+                "INSERT INTO users (id, seed_project_created, demo_seed_version) VALUES (?, 1, ?)",
+                (self.user_id, projects.DEMO_PROJECT_VERSION),
             )
             conn.execute(
                 "INSERT INTO projects (id, user_id, name) VALUES ('project-1', ?, 'Test project')",
@@ -77,8 +77,8 @@ class ProjectDataTests(unittest.TestCase):
     def test_project_list_is_scoped_by_user(self):
         with database.get_connection() as conn:
             conn.execute(
-                "INSERT INTO users (id, seed_project_created) VALUES (?, 1)",
-                (self.other_user_id,),
+                "INSERT INTO users (id, seed_project_created, demo_seed_version) VALUES (?, 1, ?)",
+                (self.other_user_id, projects.DEMO_PROJECT_VERSION),
             )
             conn.execute(
                 "INSERT INTO projects (id, user_id, name) VALUES ('project-other', ?, 'Other project')",
@@ -99,11 +99,31 @@ class ProjectDataTests(unittest.TestCase):
         first = projects.list_projects(user_id="new-user-a")["projects"]
         second = projects.list_projects(user_id="new-user-b")["projects"]
 
-        self.assertEqual(len(first), 1)
-        self.assertEqual(len(second), 1)
-        self.assertEqual(first[0]["name"], projects.EXAMPLE_PROJECT_NAME)
-        self.assertEqual(second[0]["name"], projects.EXAMPLE_PROJECT_NAME)
+        self.assertEqual(len(first), 2)
+        self.assertEqual(len(second), 2)
+        self.assertEqual(first[0]["name"], projects.STARTER_PROJECT_NAME)
+        self.assertEqual(first[0]["seed_kind"], projects.STARTER_PROJECT_SEED_KIND)
+        self.assertEqual(first[1]["name"], projects.DEMO_PROJECT_NAME)
+        self.assertEqual(first[1]["seed_kind"], projects.DEMO_PROJECT_SEED_KIND)
+        self.assertEqual(second[0]["name"], projects.STARTER_PROJECT_NAME)
+        self.assertEqual(second[1]["name"], projects.DEMO_PROJECT_NAME)
         self.assertNotEqual(first[0]["project_id"], second[0]["project_id"])
+        self.assertNotEqual(first[1]["project_id"], second[1]["project_id"])
+
+    def test_seed_demo_project_has_messages_schemes_and_renders(self):
+        listed = projects.list_projects(user_id="demo-user")["projects"]
+        demo_project = next(item for item in listed if item["seed_kind"] == projects.DEMO_PROJECT_SEED_KIND)
+
+        messages = projects.list_project_messages(demo_project["project_id"], user_id="demo-user")["messages"]
+        scheme_data = projects.list_project_schemes(demo_project["project_id"], user_id="demo-user")
+
+        self.assertGreaterEqual(len(messages), 5)
+        self.assertIn("user", [item["role"] for item in messages])
+        self.assertEqual(len(scheme_data["schemes"]), 2)
+        for scheme in scheme_data["schemes"]:
+            renders = schemes.get_scheme_renders(scheme["scheme_id"], user_id="demo-user")["renders"]
+            self.assertGreaterEqual(len(renders), 3)
+            self.assertTrue(all(item["image_url"].startswith("/renders/") for item in renders))
 
 
 if __name__ == "__main__":

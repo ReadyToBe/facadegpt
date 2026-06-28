@@ -93,7 +93,12 @@ def delete_scheme(scheme_id: str, user_id: UserId):
         local_images = [
             image_url
             for row in conn.execute(
-                "SELECT image_url, source_image_url FROM render_images WHERE scheme_id = ?", (scheme_id,)
+                """
+                SELECT image_url, source_image_url
+                FROM render_images
+                WHERE scheme_id = ? AND COALESCE(provider, '') != 'demo-seed'
+                """,
+                (scheme_id,),
             ).fetchall()
             for image_url in (row["image_url"], row["source_image_url"])
             if image_url and image_url.startswith("/renders/")

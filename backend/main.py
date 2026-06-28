@@ -49,6 +49,10 @@ RENDERS_DIR = Path(__file__).resolve().parent / "renders"
 RENDERS_DIR.mkdir(exist_ok=True)
 app.mount("/renders", StaticFiles(directory=RENDERS_DIR), name="renders")
 
+DEMO_RENDERS_DIR = Path(__file__).resolve().parent / "demo_renders"
+DEMO_RENDERS_DIR.mkdir(exist_ok=True)
+app.mount("/demo-renders", StaticFiles(directory=DEMO_RENDERS_DIR), name="demo-renders")
+
 
 @app.get("/")
 def frontend_index():

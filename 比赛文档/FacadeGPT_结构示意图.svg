@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#2f5f58"/>
+    </marker>
+    <style>
+      .title { font: 700 54px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #16211f; }
+      .sub { font: 400 25px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #4c5a57; }
+      .h { font: 700 30px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #16211f; }
+      .t { font: 400 24px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #263532; }
+      .small { font: 400 21px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #56635f; }
+      .box { fill: #ffffff; stroke: #c9d6d0; stroke-width: 2; rx: 18; }
+      .input { fill: #f7faf8; stroke: #cfdad5; stroke-width: 2; rx: 16; }
+      .core { fill: #123c36; stroke: #123c36; stroke-width: 2; rx: 24; }
+      .coreText { font: 700 34px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #ffffff; }
+      .coreSmall { font: 400 22px "Microsoft YaHei", "SimHei", Arial, sans-serif; fill: #dce9e5; }
+      .chip { fill: #e7f1ee; stroke: #b7c8c1; stroke-width: 1.5; rx: 12; }
+      .tech { fill: #f3f0e8; stroke: #d7cdbb; stroke-width: 2; rx: 18; }
+      .green { fill: #2f7d69; }
+      .line { stroke: #2f5f58; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1920" height="1080" fill="#eef4f1"/>
+  <text x="120" y="105" class="title">FacadeGPT：建筑表皮性能化生成智能体</text>
+  <text x="120" y="150" class="sub">从一句设计需求出发，把表皮方案、性能指标和教学反馈放在同一个课堂流程中</text>
+  <rect x="115" y="225" width="395" height="575" class="box"/>
+  <text x="150" y="285" class="h">输入端</text>
+  <rect x="150" y="330" width="325" height="72" class="input"/>
+  <text x="175" y="374" class="t">学生自然语言需求</text>
+  <rect x="150" y="425" width="325" height="72" class="input"/>
+  <text x="175" y="469" class="t">教师课程任务书</text>
+  <rect x="150" y="520" width="325" height="72" class="input"/>
+  <text x="175" y="564" class="t">场地、朝向、功能</text>
+  <rect x="150" y="615" width="325" height="72" class="input"/>
+  <text x="175" y="659" class="t">低碳、成本、采光目标</text>
+  <text x="150" y="735" class="small">示例：广州办公楼西立面，</text>
+  <text x="150" y="770" class="small">减少西晒，同时保持采光。</text>
+  <rect x="695" y="215" width="530" height="595" class="core"/>
+  <text x="790" y="278" class="coreText">FacadeGPT 中枢</text>
+  <text x="760" y="325" class="coreSmall">可对话、可比较、可解释、可迭代</text>
+  <rect x="755" y="375" width="410" height="58" class="chip"/>
+  <text x="810" y="412" class="t">需求解析与项目建档</text>
+  <rect x="755" y="455" width="410" height="58" class="chip"/>
+  <text x="805" y="492" class="t">课程知识检索与原则解释</text>
+  <rect x="755" y="535" width="410" height="58" class="chip"/>
+  <text x="810" y="572" class="t">表皮参数规则与边界</text>
+  <rect x="755" y="615" width="410" height="58" class="chip"/>
+  <text x="805" y="652" class="t">多目标优化与性能预测</text>
+  <rect x="755" y="695" width="410" height="58" class="chip"/>
+  <text x="825" y="732" class="t">教学反馈与追问建议</text>
+  <rect x="1410" y="225" width="395" height="575" class="box"/>
+  <text x="1445" y="285" class="h">课堂输出</text>
+  <circle cx="1465" cy="363" r="11" class="green"/><text x="1492" y="372" class="t">多组表皮方案卡片</text>
+  <circle cx="1465" cy="433" r="11" class="green"/><text x="1492" y="442" class="t">LCCE、LCC、sDA对比</text>
+  <circle cx="1465" cy="503" r="11" class="green"/><text x="1492" y="512" class="t">可旋转3D模型与截图</text>
+  <circle cx="1465" cy="573" r="11" class="green"/><text x="1492" y="582" class="t">效果图渲染与方案记录</text>
+  <circle cx="1465" cy="643" r="11" class="green"/><text x="1492" y="652" class="t">评图问题和下一步建议</text>
+  <text x="1445" y="735" class="small">教师组织讨论，学生继续选择、</text>
+  <text x="1445" y="770" class="small">验证和深化自己的设计。</text>
+  <path d="M525 512 C590 512, 620 512, 675 512" class="line"/>
+  <path d="M1245 512 C1310 512, 1340 512, 1390 512" class="line"/>
+  <rect x="245" y="880" width="1430" height="110" class="tech"/>
+  <text x="290" y="927" class="h">技术支撑层</text>
+  <text x="545" y="925" class="small">React / Three.js 前端</text>
+  <text x="815" y="925" class="small">FastAPI / SQLite 后端</text>
+  <text x="1085" y="925" class="small">XGBoost 性能代理模型</text>
+  <text x="545" y="960" class="small">课程知识库检索</text>
+  <text x="815" y="960" class="small">DeepSeek 或 OpenAI 兼容接口</text>
+  <text x="1185" y="960" class="small">通义万相图像生成</text>
+</svg>
