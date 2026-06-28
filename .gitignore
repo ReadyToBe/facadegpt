@@ -11,6 +11,7 @@ frontend/dist/
 .codex-downloads/
 .uploads/
 books/*.pdf
+比赛文档/
 backend/renders/
 backend/*.db
 backend/*.sqlite
