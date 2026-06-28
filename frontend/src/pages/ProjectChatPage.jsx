@@ -408,14 +408,18 @@ export default function ProjectChatPage() {
             </div>
             <div className="scheme-rail-list">
               {schemes.map((scheme) => (
-                <button
-                  className={scheme.scheme_id === selectedScheme?.scheme_id ? "active" : ""}
-                  key={scheme.scheme_id}
-                  onClick={() => setSelectedSchemeId(scheme.scheme_id)}
-                >
-                  <span>方案 {scheme.scheme_label}</span>
-                  <small>{strategyNames[scheme.strategy] || scheme.strategy}</small>
-                </button>
+                <div className={`scheme-rail-item${scheme.scheme_id === selectedScheme?.scheme_id ? " active" : ""}`} key={scheme.scheme_id}>
+                  <button
+                    className={scheme.scheme_id === selectedScheme?.scheme_id ? "active" : ""}
+                    onClick={() => setSelectedSchemeId(scheme.scheme_id)}
+                  >
+                    <span>方案 {scheme.scheme_label}</span>
+                    <small>{strategyNames[scheme.strategy] || scheme.strategy}</small>
+                  </button>
+                  <Link className="scheme-rail-detail-link" to={`/scheme/${scheme.scheme_id}`}>
+                    详情 <ArrowUpRight size={14} />
+                  </Link>
+                </div>
               ))}
               {!schemes.length && <p className="rail-empty">讨论清楚后生成第一组方案</p>}
             </div>
